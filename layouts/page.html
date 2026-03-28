@@ -24,4 +24,7 @@
       </div>
     {{ end }}
   </article>
+  {{- if site.Params.photoswipe.enabled }}
+    {{ partial "photoswipe.html" . }}
+  {{- end }}
 {{ end }}

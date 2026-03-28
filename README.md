@@ -12,6 +12,7 @@
 - **Hugo 资源管道** — CSS / JS 自动 minify、fingerprint，开箱即用的缓存优化
 - **Pagefind 全文搜索** — 基于 Pagefind 的静态搜索，通过配置项一键开关
 - **标签词云** — 标签页使用 wordcloud2.js 渲染词云，字号按文章数量映射，点击跳转，主题切换时自动重绘
+- **图片灯箱** — 基于 PhotoSwipe 5，文章内图片点击放大、手势缩放/滑动，通过配置项一键开关
 - **完整页面模板** — 首页、文章列表、文章详情、标签词云、标签归档、搜索、404 页面
 
 ## 要求
@@ -136,6 +137,18 @@ npx pagefind --site public
 ```
 
 > 启用后导航栏会自动出现搜索图标按钮，无需手动添加菜单项。
+
+### 图片灯箱
+
+主题集成了 [PhotoSwipe 5](https://photoswipe.com/)，文章页图片点击可放大浏览，支持手势缩放和滑动切换。通过 `params.photoswipe.enabled` 控制开关：
+
+```toml
+[params]
+  [params.photoswipe]
+    enabled = true   # 设为 false 可关闭图片灯箱
+```
+
+> 启用后文章内所有未被链接包裹的图片会自动获得灯箱效果，无需额外操作。
 
 ### 菜单配置
 

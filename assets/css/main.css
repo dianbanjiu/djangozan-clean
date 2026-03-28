@@ -465,6 +465,23 @@ main {
 .article-content img {
   margin: 1.5rem 0;
   box-shadow: var(--shadow-out);
+  cursor: zoom-in;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.article-content img:hover {
+  box-shadow: var(--shadow-out-hover);
+  transform: translateY(-2px);
+}
+
+.article-content a[data-pswp-width] {
+  display: block;
+  text-decoration: none;
+  border: none;
+}
+
+.pswp {
+  --pswp-bg: var(--bg);
 }
 
 .article-footer {

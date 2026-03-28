@@ -21,6 +21,8 @@ title = 'DjangoZane'
 [params]
   [params.search]
     enabled = true
+  [params.photoswipe]
+    enabled = true
 
 [module]
   [module.hugoVersion]

@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/umd/photoswipe-lightbox.umd.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var container = document.querySelector('.article-content');
+    if (!container) return;
+
+    // 对未被 render-image 模板包裹的 img 做动态包裹
+    container.querySelectorAll('img').forEach(function (img) {
+      if (img.closest('a')) return;
+      var wrapper = document.createElement('a');
+      wrapper.href = img.src;
+      wrapper.setAttribute('data-pswp-width', img.naturalWidth || 1600);
+      wrapper.setAttribute('data-pswp-height', img.naturalHeight || 1200);
+      wrapper.setAttribute('target', '_blank');
+      wrapper.setAttribute('rel', 'noopener');
+      img.parentNode.insertBefore(wrapper, img);
+      wrapper.appendChild(img);
+      img.addEventListener('load', function () {
+        wrapper.setAttribute('data-pswp-width', img.naturalWidth);
+        wrapper.setAttribute('data-pswp-height', img.naturalHeight);
+      });
+    });
+
+    var links = container.querySelectorAll('a[data-pswp-width]');
+    if (!links.length) return;
+
+    var lightbox = new PhotoSwipeLightbox({
+      gallery: '.article-content',
+      children: 'a[data-pswp-width]',
+      pswpModule: PhotoSwipe,
+      bgClickAction: 'close',
+      tapAction: 'close',
+      showAnimationDuration: 250,
+      hideAnimationDuration: 200,
+      zoomAnimationDuration: 250,
+      showHideAnimationType: 'zoom',
+      bgOpacity: 0.9
+    });
+
+    lightbox.addFilter('thumbEl', function (thumbEl, data, index) {
+      var allLinks = container.querySelectorAll('a[data-pswp-width]');
+      var link = allLinks[index];
+      return link ? link.querySelector('img') || thumbEl : thumbEl;
+    });
+
+    lightbox.init();
+  });
+</script>
