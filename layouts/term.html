@@ -1,0 +1,28 @@
+{{ define "main" }}
+  <section class="hero">
+    <h1 class="hero-title">{{ .Title }}</h1>
+    {{ with .Content }}
+      <div class="hero-desc">{{ . }}</div>
+    {{ end }}
+  </section>
+
+  {{ with .Pages }}
+    <div class="post-grid">
+      {{ range . }}
+        <article class="card post-card">
+          <h3 class="post-title">
+            <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+          </h3>
+          <div class="post-meta">
+            {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+            {{ $dateHuman := .Date | time.Format ":date_long" }}
+            <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+          </div>
+          {{ with .Summary }}
+            <div class="post-summary">{{ . }}</div>
+          {{ end }}
+        </article>
+      {{ end }}
+    </div>
+  {{ end }}
+{{ end }}

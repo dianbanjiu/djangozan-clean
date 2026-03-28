@@ -1,0 +1,18 @@
+{{ define "main" }}
+  <section class="hero">
+    <h1 class="hero-title">{{ .Title }}</h1>
+    {{ with .Content }}
+      <div class="hero-desc">{{ . }}</div>
+    {{ end }}
+  </section>
+
+  {{ with .Pages }}
+    <div class="taxonomy-list">
+      {{ range . }}
+        <div class="taxonomy-item">
+          <a href="{{ .RelPermalink }}">{{ .LinkTitle }} ({{ .Pages.Len }})</a>
+        </div>
+      {{ end }}
+    </div>
+  {{ end }}
+{{ end }}
