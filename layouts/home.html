@@ -9,7 +9,7 @@
   {{ $paginator := .Paginate site.RegularPages }}
   {{ with $paginator.Pages }}
     <section>
-      <h2 class="section-title">Latest Posts</h2>
+      <h2 class="section-title">{{ i18n "latest_posts" }}</h2>
       <div class="post-grid">
         {{ range . }}
           <article class="card post-card">

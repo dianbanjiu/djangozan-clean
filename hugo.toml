@@ -1,21 +1,24 @@
 baseURL = 'https://example.org/'
-languageCode = 'en-US'
+languageCode = 'zh-Hans'
 title = 'DjangoZane'
 paginate = 10
 
 [menus]
   [[menus.main]]
-    name = 'Home'
+    identifier = 'home'
+    name = '首页'
     pageRef = '/'
     weight = 10
 
   [[menus.main]]
-    name = 'Posts'
+    identifier = 'posts'
+    name = '文章'
     pageRef = '/posts'
     weight = 20
 
   [[menus.main]]
-    name = 'Tags'
+    identifier = 'tags'
+    name = '标签'
     pageRef = '/tags'
     weight = 30
 

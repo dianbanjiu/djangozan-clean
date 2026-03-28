@@ -2,17 +2,17 @@
 {{- if gt $pag.TotalPages 1 -}}
   <nav class="pagination" aria-label="pagination">
     {{- if $pag.HasPrev -}}
-      <a class="pagination-link pagination-prev" href="{{ $pag.Prev.URL }}">← Prev</a>
+      <a class="pagination-link pagination-prev" href="{{ $pag.Prev.URL }}">{{ i18n "prev" }}</a>
     {{- else -}}
-      <span class="pagination-link pagination-prev disabled">← Prev</span>
+      <span class="pagination-link pagination-prev disabled">{{ i18n "prev" }}</span>
     {{- end -}}
 
     <span class="pagination-info">{{ $pag.PageNumber }} / {{ $pag.TotalPages }}</span>
 
     {{- if $pag.HasNext -}}
-      <a class="pagination-link pagination-next" href="{{ $pag.Next.URL }}">Next →</a>
+      <a class="pagination-link pagination-next" href="{{ $pag.Next.URL }}">{{ i18n "next" }}</a>
     {{- else -}}
-      <span class="pagination-link pagination-next disabled">Next →</span>
+      <span class="pagination-link pagination-next disabled">{{ i18n "next" }}</span>
     {{- end -}}
   </nav>
 {{- end -}}

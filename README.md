@@ -9,6 +9,7 @@
 - **Catppuccin 配色** — 亮色模式使用 Latte，暗色模式使用 Mocha，视觉柔和舒适
 - **新拟态设计** — 卡片、按钮、标签均采用凸出/凹陷阴影，呈现立体质感
 - **明暗主题切换** — 支持手动切换与跟随系统偏好，`localStorage` 持久化，无闪烁
+- **i18n 多语言** — 内置简体中文、繁体中文、英文翻译，通过 `languageCode` 配置切换界面语言
 - **响应式布局** — 桌面端双列文章网格，移动端自动切换为单列，小屏幕下导航折叠为汉堡菜单
 - **零依赖** — 无 Tailwind / Bootstrap / npm，纯 CSS + 原生 JS，轻量快速
 - **Hugo 资源管道** — CSS / JS 自动 minify、fingerprint，开箱即用的缓存优化
@@ -84,22 +85,25 @@ hugo server -D
 
 ```toml
 baseURL = 'https://example.org/'
-languageCode = 'zh-CN'
+languageCode = 'zh-Hans'
 title = '我的博客'
 
 [menus]
   [[menus.main]]
-    name = 'Home'
+    identifier = 'home'
+    name = '首页'
     pageRef = '/'
     weight = 10
 
   [[menus.main]]
-    name = 'Posts'
+    identifier = 'posts'
+    name = '文章'
     pageRef = '/posts'
     weight = 20
 
   [[menus.main]]
-    name = 'Tags'
+    identifier = 'tags'
+    name = '标签'
     pageRef = '/tags'
     weight = 30
 
@@ -112,6 +116,18 @@ title = '我的博客'
     extended = false
     min = '0.146.0'
 ```
+
+### 语言配置
+
+通过 `languageCode` 切换界面语言，内置三种翻译：
+
+| `languageCode` | 语言 |
+|---|---|
+| `zh-Hans` | 简体中文 |
+| `zh-Hant` | 繁体中文 |
+| `en` | English |
+
+翻译文件位于 `i18n/` 目录，可自行修改或新增语言。切换语言时菜单 `name` 也需一并修改。
 
 ### 搜索配置
 
@@ -189,14 +205,18 @@ tags = ['Hugo', '教程']
 ```
 .
 ├── archetypes/
-│   └── default.md          # 新内容模板
+│   └── default.md              # 新内容模板
 ├── assets/
 │   ├── css/main.css         # 主样式（Catppuccin 变量 + 新拟态）
 │   └── js/main.js           # 主题切换 + 移动端菜单
 ├── content/
 │   ├── _index.md            # 首页内容
-│   ├── search.md            # 搜索页面
+│   ├── search/              # 搜索页面
 │   └── posts/               # 文章目录
+├── i18n/
+│   ├── zh-Hans.yaml         # 简中翻译
+│   ├── zh-Hant.yaml         # 繁中翻译
+│   └── en.yaml              # 英文翻译
 ├── layouts/
 │   ├── baseof.html          # HTML 骨架
 │   ├── home.html            # 首页模板

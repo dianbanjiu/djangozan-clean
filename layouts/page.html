@@ -7,7 +7,7 @@
         {{ $dateHuman := .Date | time.Format ":date_long" }}
         <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
         {{ with .ReadingTime }}
-          <span>&middot; {{ . }} min read</span>
+          <span>&middot; {{ . }} {{ i18n "min_read" }}</span>
         {{ end }}
       </div>
     </div>

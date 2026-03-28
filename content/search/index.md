@@ -1,5 +1,4 @@
 ---
-title: "🥰Find something~🥰"
+title: "搜索"
 layout: search
 ---
-
