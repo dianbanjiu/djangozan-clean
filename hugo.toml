@@ -25,6 +25,12 @@ paginate = 10
   [params.photoswipe]
     enabled = true
 
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    noClasses = true
+
 [module]
   [module.hugoVersion]
     extended = false
