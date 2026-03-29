@@ -8,11 +8,12 @@
 
 - **Catppuccin 配色** — 亮色模式使用 Latte，暗色模式使用 Mocha，视觉柔和舒适
 - **新拟态设计** — 卡片、按钮、标签均采用凸出/凹陷阴影，呈现立体质感
-- **明暗主题切换** — 支持手动切换与跟随系统偏好，`localStorage` 持久化，无闪烁
+- **明暗主题切换** — 支持手动切换与跟随系统偏好
+- **全局背景图** — 通过配置项设置全屏背景图，自动为 header、卡片、footer 添加毛玻璃半透明效果
+- **代码块增强** — 自动显示语言标签 + 一键复制按钮
 - **i18n 多语言** — 内置简体中文、繁体中文、英文翻译，通过 `languageCode` 配置切换界面语言
 - **响应式布局** — 桌面端双列文章网格，移动端自动切换为单列，小屏幕下导航折叠为汉堡菜单
 - **零依赖** — 无 Tailwind / Bootstrap / npm，纯 CSS + 原生 JS，轻量快速
-- **Hugo 资源管道** — CSS / JS 自动 minify、fingerprint，开箱即用的缓存优化
 - **Pagefind 全文搜索** — 基于 Pagefind 的静态搜索，通过配置项一键开关
 - **标签词云** — 标签页使用 wordcloud2.js 渲染词云，字号按文章数量映射，点击跳转，主题切换时自动重绘
 - **图片灯箱** — 基于 PhotoSwipe 5，文章内图片点击放大、手势缩放/滑动，通过配置项一键开关
@@ -87,6 +88,7 @@ hugo server -D
 baseURL = 'https://example.org/'
 languageCode = 'zh-Hans'
 title = '我的博客'
+paginate = 10
 
 [menus]
   [[menus.main]]
@@ -108,14 +110,35 @@ title = '我的博客'
     weight = 30
 
 [params]
+  # logo = '/images/logo.png'
+  # favicon = '/favicon.svg'
+  # backgroundImage = '/bg.jpg'
   [params.search]
     enabled = true
+  [params.photoswipe]
+    enabled = true
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    noClasses = false
 
 [module]
   [module.hugoVersion]
     extended = false
     min = '0.146.0'
 ```
+
+### 参数说明
+
+| 参数 | 说明 | 默认值 |
+|------|------|--------|
+| `logo` | 站点 Logo 图片路径（放在 `static/` 下） | 无，显示站点标题文字 |
+| `favicon` | 站点图标路径 | 无 |
+| `backgroundImage` | 全局背景图路径（放在 `static/` 下） | 无，使用纯色背景 |
+| `search.enabled` | 是否启用 Pagefind 全文搜索 | `false` |
+| `photoswipe.enabled` | 是否启用图片灯箱 | `false` |
 
 ### 语言配置
 
@@ -128,6 +151,17 @@ title = '我的博客'
 | `en` | English |
 
 翻译文件位于 `i18n/` 目录，可自行修改或新增语言。切换语言时菜单 `name` 也需一并修改。
+
+### 全局背景图
+
+在 `[params]` 中设置 `backgroundImage` 即可启用全屏背景图：
+
+```toml
+[params]
+  backgroundImage = '/bg.jpg'
+```
+
+将图片放到站点的 `static/` 目录下。启用后 header、卡片、footer 等区域会自动添加毛玻璃半透明效果，保证内容可读性。不设置则使用默认纯色背景。
 
 ### 搜索配置
 
@@ -181,13 +215,13 @@ npx pagefind --site public
 
 ### 文章 Front Matter
 
-```toml
-+++
-title = '文章标题'
-date = 2025-01-01T08:00:00+08:00
-draft = false
-tags = ['Hugo', '教程']
-+++
+```yaml
+---
+title: "文章标题"
+date: 2025-01-01T08:00:00+08:00
+lastmod: 2025-03-15T10:00:00+08:00
+tags: ["Hugo", "教程"]
+---
 ```
 
 支持的字段：
@@ -195,7 +229,8 @@ tags = ['Hugo', '教程']
 | 字段 | 说明 |
 |------|------|
 | `title` | 文章标题 |
-| `date` | 发布日期，用于排序和显示 |
+| `date` | 发布日期，用于排序和显示，格式为 `YYYY-MM-DD` |
+| `lastmod` | 最后修改日期，与 `date` 年月日不同时自动显示 |
 | `draft` | 设为 `true` 时仅 `hugo server -D` 可见 |
 | `tags` | 标签列表，自动生成标签页 |
 | `summary` | 自定义摘要，未设置时自动截取正文 |
@@ -205,35 +240,40 @@ tags = ['Hugo', '教程']
 ```
 .
 ├── archetypes/
-│   └── default.md              # 新内容模板
+│   └── default.md                          # 新内容模板
 ├── assets/
-│   ├── css/main.css         # 主样式（Catppuccin 变量 + 新拟态）
-│   └── js/main.js           # 主题切换 + 移动端菜单
+│   ├── css/main.css                        # 主样式（Catppuccin 变量 + 新拟态）
+│   └── js/main.js                          # 主题切换 + 移动端菜单
 ├── content/
-│   ├── _index.md            # 首页内容
-│   ├── search/              # 搜索页面
-│   └── posts/               # 文章目录
+│   ├── _index.md                           # 首页内容
+│   └── posts/                              # 示例文章
 ├── i18n/
-│   ├── zh-Hans.yaml         # 简中翻译
-│   ├── zh-Hant.yaml         # 繁中翻译
-│   └── en.yaml              # 英文翻译
+│   ├── zh-Hans.yaml                        # 简中翻译
+│   ├── zh-Hant.yaml                        # 繁中翻译
+│   └── en.yaml                             # 英文翻译
 ├── layouts/
-│   ├── baseof.html          # HTML 骨架
-│   ├── home.html            # 首页模板
-│   ├── page.html            # 文章详情
-│   ├── section.html         # 分区列表
-│   ├── taxonomy.html        # 标签/分类总览
-│   ├── term.html            # 单个标签下的文章列表
-│   ├── search.html          # 搜索页面（Pagefind）
-│   ├── 404.html             # 404 页面
-│   └── _partials/           # 可复用片段
-│       ├── head.html
-│       ├── head/css.html
-│       ├── head/js.html
-│       ├── header.html
-│       ├── footer.html
-│       └── menu.html
-└── hugo.toml                # 站点配置
+│   ├── baseof.html                         # HTML 骨架
+│   ├── home.html                           # 首页模板
+│   ├── page.html                           # 文章详情
+│   ├── section.html                        # 分区列表
+│   ├── taxonomy.html                       # 标签/分类总览
+│   ├── term.html                           # 单个标签下的文章列表
+│   ├── 404.html                            # 404 页面
+│   ├── _default/_markup/
+│   │   └── render-codeblock.html           # 代码块渲染（语言标签 + 复制按钮）
+│   └── _partials/
+│       ├── head.html                       # <head> 内容
+│       ├── head/css.html                   # CSS 资源管道
+│       ├── head/js.html                    # JS 资源管道
+│       ├── header.html                     # 站点头部
+│       ├── footer.html                     # 站点底部
+│       ├── menu.html                       # 导航菜单
+│       ├── hero.html                       # 首页 Hero 区域
+│       ├── datetime.html                   # 日期 + 最后更新时间
+│       ├── post-card.html                  # 文章卡片
+│       ├── pagination.html                 # 分页导航
+│       └── photoswipe.html                 # PhotoSwipe 灯箱
+└── hugo.toml                               # 主题示例配置
 ```
 
 ## 自定义
