@@ -1,3 +1,7 @@
+{{- $dateFmt := "2006-01-02" -}}
 {{- $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" -}}
-{{- $dateHuman := .Date | time.Format ":date_long" -}}
-<time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+<time datetime="{{ $dateMachine }}">{{ .Date | time.Format $dateFmt }}</time>
+{{- if and .Lastmod (ne (.Lastmod | time.Format "2006-01-02") (.Date | time.Format "2006-01-02")) -}}
+  {{- $lastmodMachine := .Lastmod | time.Format "2006-01-02T15:04:05-07:00" -}}
+  <span>&middot; {{ i18n "last_updated" }} <time datetime="{{ $lastmodMachine }}">{{ .Lastmod | time.Format $dateFmt }}</time></span>
+{{- end -}}
