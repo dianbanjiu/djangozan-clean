@@ -13,5 +13,22 @@
   <footer class="site-footer">
     {{ partial "footer.html" . }}
   </footer>
+  {{- if site.Params.search.enabled }}
+    <div class="search-overlay" id="search-overlay" aria-hidden="true">
+      <div class="search-overlay-backdrop" id="search-overlay-backdrop"></div>
+      <div class="search-overlay-panel">
+        <div class="search-overlay-header">
+          <div class="search-overlay-input-wrap">
+            <svg class="search-overlay-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" class="search-overlay-input" id="search-overlay-input" placeholder="{{ i18n "search" }}..." autocomplete="off" />
+            <kbd class="search-overlay-kbd">Esc</kbd>
+          </div>
+        </div>
+        <div class="search-overlay-results" id="search-overlay-results"></div>
+      </div>
+    </div>
+  {{- end }}
 </body>
 </html>

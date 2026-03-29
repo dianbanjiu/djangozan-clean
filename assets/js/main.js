@@ -104,4 +104,145 @@
         applyTheme(getSystemTheme());
       }
     });
+
+  // Search overlay
+  document.addEventListener("DOMContentLoaded", function () {
+    var overlay = document.getElementById("search-overlay");
+    if (!overlay) return;
+
+    var backdrop = document.getElementById("search-overlay-backdrop");
+    var input = document.getElementById("search-overlay-input");
+    var resultsEl = document.getElementById("search-overlay-results");
+    var openBtn = document.getElementById("search-open");
+    var openBtnMobile = document.getElementById("search-open-mobile");
+    var pagefind = null;
+    var debounceTimer = null;
+    var activeIndex = -1;
+
+    var pagefindPromise = null;
+    function loadPagefind(cb) {
+      if (pagefind) return cb();
+      if (!pagefindPromise) {
+        pagefindPromise = import("/pagefind/pagefind.js").then(function (mod) {
+          pagefind = mod;
+          if (pagefind.init) pagefind.init();
+          return pagefind;
+        }).catch(function () {
+          pagefindPromise = null;
+        });
+      }
+      pagefindPromise.then(function () { if (pagefind) cb(); });
+    }
+
+    function openSearch() {
+      overlay.classList.add("open");
+      overlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("search-open");
+      input.value = "";
+      resultsEl.innerHTML = "";
+      activeIndex = -1;
+      setTimeout(function () { input.focus(); }, 50);
+      loadPagefind(function () {});
+    }
+
+    function closeSearch() {
+      overlay.classList.remove("open");
+      overlay.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("search-open");
+      activeIndex = -1;
+    }
+
+    if (openBtn) openBtn.addEventListener("click", openSearch);
+    if (openBtnMobile) openBtnMobile.addEventListener("click", function () {
+      var nav = document.getElementById("site-nav");
+      if (nav) nav.classList.remove("open");
+      openSearch();
+    });
+
+    backdrop.addEventListener("click", closeSearch);
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "/" && !overlay.classList.contains("open")) {
+        var tag = (e.target.tagName || "").toLowerCase();
+        if (tag === "input" || tag === "textarea" || e.target.isContentEditable) return;
+        e.preventDefault();
+        openSearch();
+        return;
+      }
+      if (e.key === "Escape" && overlay.classList.contains("open")) {
+        closeSearch();
+        return;
+      }
+      if (!overlay.classList.contains("open")) return;
+      var items = resultsEl.querySelectorAll(".search-overlay-item");
+      if (!items.length) return;
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        activeIndex = (activeIndex + 1) % items.length;
+        updateActive(items);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        activeIndex = (activeIndex - 1 + items.length) % items.length;
+        updateActive(items);
+      } else if (e.key === "Enter" && activeIndex >= 0 && items[activeIndex]) {
+        e.preventDefault();
+        items[activeIndex].click();
+      }
+    });
+
+    function updateActive(items) {
+      items.forEach(function (el, i) {
+        el.classList.toggle("active", i === activeIndex);
+      });
+      if (activeIndex >= 0 && items[activeIndex]) {
+        items[activeIndex].scrollIntoView({ block: "nearest" });
+      }
+    }
+
+    function doSearch(query) {
+      if (!query.trim()) {
+        resultsEl.innerHTML = "";
+        activeIndex = -1;
+        return;
+      }
+      loadPagefind(function () {
+        if (!pagefind) return;
+        pagefind.search(query).then(function (search) {
+          if (input.value.trim() !== query.trim()) return;
+          if (!search.results.length) {
+            resultsEl.innerHTML = '<div class="search-overlay-empty">' +
+              (document.documentElement.lang === "zh-Hans" ? "没有找到相关结果" : "No results found") +
+              '</div>';
+            activeIndex = -1;
+            return;
+          }
+          var toShow = search.results.slice(0, 8);
+          Promise.all(toShow.map(function (r) { return r.data(); })).then(function (dataArr) {
+            if (input.value.trim() !== query.trim()) return;
+            var html = "";
+            dataArr.forEach(function (d) {
+              html += '<a class="search-overlay-item" href="' + d.url + '">' +
+                '<div class="search-overlay-item-title">' + escapeHtml(d.meta.title || d.url) + '</div>' +
+                '<div class="search-overlay-item-excerpt">' + (d.excerpt || "") + '</div>' +
+                '</a>';
+            });
+            resultsEl.innerHTML = html;
+            activeIndex = -1;
+          });
+        });
+      });
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    input.addEventListener("input", function () {
+      var q = input.value;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(function () { doSearch(q); }, 200);
+    });
+  });
 })();

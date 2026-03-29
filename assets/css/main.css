@@ -924,6 +924,167 @@ main {
   color: var(--accent) !important;
 }
 
+/* ===== Search Overlay ===== */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10vh;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.search-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.search-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+[data-theme="dark"] .search-overlay-backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.search-overlay-panel {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  max-height: 70vh;
+  margin: 0 1.5rem;
+  background: var(--bg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15), var(--shadow-out);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(-12px) scale(0.98);
+  transition: transform 0.2s ease;
+}
+
+.search-overlay.open .search-overlay-panel {
+  transform: translateY(0) scale(1);
+}
+
+.search-overlay-header {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.search-overlay-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-in);
+  padding: 0.5rem 0.75rem;
+}
+
+.search-overlay-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.search-overlay-input {
+  flex: 1;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--text);
+  min-width: 0;
+}
+
+.search-overlay-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.search-overlay-kbd {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  font-family: inherit;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-out-sm);
+  line-height: 1.4;
+}
+
+.search-overlay-results {
+  overflow-y: auto;
+  padding: 0.5rem 0.75rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.search-overlay-results:empty {
+  display: none;
+}
+
+.search-overlay-empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.search-overlay-item {
+  display: block;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  transition: background 0.15s ease;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.search-overlay-item:hover,
+.search-overlay-item.active {
+  background: var(--bg-secondary);
+  color: var(--text);
+}
+
+.search-overlay-item-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.search-overlay-item-excerpt {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.search-overlay-item-excerpt mark {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 2px;
+  padding: 0 0.15rem;
+}
+
+body.search-open {
+  overflow: hidden;
+}
+
 /* ===== Pagination ===== */
 .pagination {
   display: flex;
@@ -1078,7 +1239,8 @@ main {
     display: list-item;
   }
 
-  .nav-search-item a {
+  .nav-search-item a,
+  .nav-search-item .nav-search-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1087,6 +1249,26 @@ main {
 
   .nav-search-item svg {
     flex-shrink: 0;
+  }
+
+  .nav-search-btn {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: var(--bg);
+    box-shadow: var(--shadow-btn);
+    transition: all 0.2s ease;
+  }
+
+  .nav-search-btn:hover {
+    color: var(--accent);
+    box-shadow: var(--shadow-btn-hover);
   }
 
   .hero-title {
