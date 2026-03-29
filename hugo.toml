@@ -23,8 +23,12 @@ paginate = 10
     weight = 30
 
 [params]
+  # 这里的静态资源都需要放在static目录下，
+  # 比如下面的背景图就是在 static/bg.jpg
+  # logo 是在 static/images/logo.png
   # logo = '/images/logo.png'
   # favicon = '/favicon.svg'
+  # backgroundImage = 'bg.jpg'
   [params.search]
     enabled = true
   [params.photoswipe]

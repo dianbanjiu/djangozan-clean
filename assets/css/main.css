@@ -142,6 +142,10 @@ body {
   line-height: 1.7;
   color: var(--text);
   background-color: var(--bg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   transition: background-color 0.3s ease, color 0.3s ease;
   min-height: 100vh;
   display: flex;
@@ -1061,6 +1065,31 @@ body.search-open {
   color: var(--text-secondary);
   font-size: 0.9rem;
   transition: background-color 0.3s ease;
+}
+
+/* ===== Background Image ===== */
+body.has-bg-image {
+  background-color: transparent;
+}
+
+body.has-bg-image .site-header {
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+body.has-bg-image .card,
+body.has-bg-image .footer-card {
+  background: color-mix(in srgb, var(--card-bg) 85%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+body.has-bg-image .site-nav a,
+body.has-bg-image .search-toggle,
+body.has-bg-image .theme-toggle,
+body.has-bg-image .menu-toggle {
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
 }
 
 /* ===== Responsive ===== */

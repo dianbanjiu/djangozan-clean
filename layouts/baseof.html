@@ -3,7 +3,11 @@
 <head>
   {{ partial "head.html" . }}
 </head>
+{{- with site.Params.backgroundImage -}}
+<body class="has-bg-image" style="background-image: url('{{ . | relURL }}');">
+{{- else -}}
 <body>
+{{- end -}}
   <header class="site-header">
     {{ partial "header.html" . }}
   </header>
