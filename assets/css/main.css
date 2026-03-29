@@ -243,6 +243,13 @@ main {
   color: var(--accent);
 }
 
+.site-logo {
+  height: 1.6em;
+  width: auto;
+  vertical-align: middle;
+  border-radius: var(--radius-sm);
+}
+
 
 .header-right {
   display: flex;

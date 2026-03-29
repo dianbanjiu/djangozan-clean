@@ -1,6 +1,9 @@
 <div class="container">
   <div class="site-title" id="site-title">
-    <span class="site-title-brand"><a href="{{ "/" | relURL }}">{{ site.Title }}</a></span>
+    <span class="site-title-brand"><a href="{{ "/" | relURL }}">
+      {{- with site.Params.logo }}<img class="site-logo" src="{{ . | relURL }}" alt="{{ site.Title }}">
+      {{- else }}{{ site.Title }}
+      {{- end }}</a></span>
     <span class="site-title-article" id="site-title-article" aria-hidden="true"></span>
   </div>
   <div class="header-right">

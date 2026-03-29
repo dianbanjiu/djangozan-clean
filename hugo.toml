@@ -23,6 +23,8 @@ paginate = 10
     weight = 30
 
 [params]
+  # logo = '/images/logo.png'
+  # favicon = '/favicon.svg'
   [params.search]
     enabled = true
   [params.photoswipe]
