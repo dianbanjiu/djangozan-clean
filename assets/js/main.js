@@ -24,6 +24,7 @@
   applyTheme(getEffectiveTheme());
 
   document.addEventListener("DOMContentLoaded", function () {
+    // Copy buttons
     document.querySelectorAll(".code-block .copy-btn").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var block = btn.closest(".code-block");
@@ -38,7 +39,8 @@
         });
       });
     });
-    // 移动端文章标题切换
+
+    // Mobile article title swap
     (function () {
       var mq = window.matchMedia("(max-width: 480px)");
       var siteTitle = document.getElementById("site-title");
@@ -69,6 +71,7 @@
       mq.addEventListener("change", setup);
     })();
 
+    // Theme toggle
     const toggle = document.getElementById("theme-toggle");
     if (toggle) {
       toggle.addEventListener("click", function () {
@@ -79,6 +82,7 @@
       });
     }
 
+    // Mobile menu
     const menuToggle = document.getElementById("menu-toggle");
     const siteNav = document.getElementById("site-nav");
     if (menuToggle && siteNav) {
@@ -95,18 +99,8 @@
         }
       });
     }
-  });
 
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", function () {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        applyTheme(getSystemTheme());
-      }
-    });
-
-  // Search overlay
-  document.addEventListener("DOMContentLoaded", function () {
+    // Search overlay
     var overlay = document.getElementById("search-overlay");
     if (!overlay) return;
 
@@ -154,8 +148,7 @@
 
     if (openBtn) openBtn.addEventListener("click", openSearch);
     if (openBtnMobile) openBtnMobile.addEventListener("click", function () {
-      var nav = document.getElementById("site-nav");
-      if (nav) nav.classList.remove("open");
+      if (siteNav) siteNav.classList.remove("open");
       openSearch();
     });
 
@@ -245,4 +238,12 @@
       debounceTimer = setTimeout(function () { doSearch(q); }, 200);
     });
   });
+
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", function () {
+      if (!localStorage.getItem(STORAGE_KEY)) {
+        applyTheme(getSystemTheme());
+      }
+    });
 })();

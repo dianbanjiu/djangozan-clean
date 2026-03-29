@@ -1,0 +1,6 @@
+<section class="hero">
+  <h1 class="hero-title">{{ .Title }}</h1>
+  {{ with .Content }}
+    <div class="hero-desc">{{ . }}</div>
+  {{ end }}
+</section>

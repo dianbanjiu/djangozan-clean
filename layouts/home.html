@@ -1,10 +1,5 @@
 {{ define "main" }}
-  <section class="hero">
-    <h1 class="hero-title">{{ .Title }}</h1>
-    {{ with .Content }}
-      <div class="hero-desc">{{ . }}</div>
-    {{ end }}
-  </section>
+  {{ partial "hero.html" . }}
 
   {{ $paginator := .Paginate (where site.RegularPages "Section" "posts") }}
   {{ with $paginator.Pages }}
@@ -12,29 +7,7 @@
       <h2 class="section-title">{{ i18n "latest_posts" }}</h2>
       <div class="post-grid">
         {{ range . }}
-          <article class="card post-card">
-            <h3 class="post-title">
-              <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
-            </h3>
-            <div class="post-meta">
-              {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
-              {{ $dateHuman := .Date | time.Format ":date_long" }}
-              <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
-            </div>
-            {{ with .Content }}
-              {{ $paragraphs := findRE `<p>(.|\n)*?</p>` . }}
-              {{ with index $paragraphs 0 }}
-                <div class="post-summary">{{ . | plainify | truncate 150 }}</div>
-              {{ end }}
-            {{ end }}
-            {{ with .GetTerms "tags" }}
-              <div class="tags">
-                {{ range . }}
-                  <a class="tag" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
-                {{ end }}
-              </div>
-            {{ end }}
-          </article>
+          {{ partial "post-card.html" . }}
         {{ end }}
       </div>
       {{ partial "pagination.html" $ }}

@@ -39,9 +39,9 @@
       bgOpacity: 0.9
     });
 
+    var thumbLinks = container.querySelectorAll('a[data-pswp-width]');
     lightbox.addFilter('thumbEl', function (thumbEl, data, index) {
-      var allLinks = container.querySelectorAll('a[data-pswp-width]');
-      var link = allLinks[index];
+      var link = thumbLinks[index];
       return link ? link.querySelector('img') || thumbEl : thumbEl;
     });
 
