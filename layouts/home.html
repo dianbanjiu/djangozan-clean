@@ -1,7 +1,7 @@
 {{ define "main" }}
   {{ partial "hero.html" . }}
 
-  {{ $paginator := .Paginate (where site.RegularPages "Section" "posts") }}
+  {{ $paginator := .Paginate site.RegularPages }}
   {{ with $paginator.Pages }}
     <section>
       <h2 class="section-title">{{ i18n "latest_posts" }}</h2>
