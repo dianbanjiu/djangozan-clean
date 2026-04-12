@@ -2,12 +2,14 @@
   {{ partial "hero.html" . }}
 
   {{ $paginator := .Paginate .Pages }}
-  {{ with $paginator.Pages }}
+  {{ if $paginator.Pages }}
     <div class="post-grid">
-      {{ range . }}
+      {{ range $paginator.Pages }}
         {{ partial "post-card.html" . }}
       {{ end }}
     </div>
     {{ partial "pagination.html" $ }}
+  {{ else }}
+    <p class="empty-state">{{ i18n "no_posts" }}</p>
   {{ end }}
 {{ end }}

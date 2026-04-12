@@ -2,6 +2,11 @@
   const STORAGE_KEY = "djangozane-clean-theme";
   const html = document.documentElement;
 
+  function themeT(key, fallback) {
+    var o = window.__THEME_I18N__ || {};
+    return o[key] || fallback || "";
+  }
+
   function getSystemTheme() {
     return window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "dark"
@@ -31,11 +36,20 @@
         var code = block.querySelector("code");
         if (!code) return;
         var text = code.textContent;
+        btn.removeAttribute("data-copy-error");
         navigator.clipboard.writeText(text).then(function () {
           btn.classList.add("copied");
           setTimeout(function () {
             btn.classList.remove("copied");
           }, 2000);
+        }).catch(function () {
+          var msg = themeT("copyFailed", "Could not copy");
+          btn.setAttribute("data-copy-error", "1");
+          btn.setAttribute("title", msg);
+          setTimeout(function () {
+            btn.removeAttribute("data-copy-error");
+            btn.removeAttribute("title");
+          }, 4000);
         });
       });
     });
@@ -133,10 +147,21 @@
       overlay.setAttribute("aria-hidden", "false");
       document.body.classList.add("search-open");
       input.value = "";
-      resultsEl.innerHTML = "";
       activeIndex = -1;
+      if (!pagefind) {
+        resultsEl.innerHTML =
+          '<div class="search-overlay-empty search-overlay-loading">' +
+          themeT("searchLoading", "Loading…") +
+          "</div>";
+      } else {
+        resultsEl.innerHTML = "";
+      }
       setTimeout(function () { input.focus(); }, 50);
-      loadPagefind(function () {});
+      loadPagefind(function () {
+        if (!input.value.trim()) {
+          resultsEl.innerHTML = "";
+        }
+      });
     }
 
     function closeSearch() {
@@ -198,14 +223,21 @@
         activeIndex = -1;
         return;
       }
+      if (!pagefind) {
+        resultsEl.innerHTML =
+          '<div class="search-overlay-empty search-overlay-loading">' +
+          themeT("searchLoading", "Loading…") +
+          "</div>";
+      }
       loadPagefind(function () {
         if (!pagefind) return;
         pagefind.search(query).then(function (search) {
           if (input.value.trim() !== query.trim()) return;
           if (!search.results.length) {
-            resultsEl.innerHTML = '<div class="search-overlay-empty">' +
-              (document.documentElement.lang === "zh-Hans" ? "没有找到相关结果" : "No results found") +
-              '</div>';
+            resultsEl.innerHTML =
+              '<div class="search-overlay-empty">' +
+              themeT("searchNoResults", "No results found") +
+              "</div>";
             activeIndex = -1;
             return;
           }

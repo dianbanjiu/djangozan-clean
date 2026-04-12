@@ -10,3 +10,10 @@
 </script>
 {{ partialCached "head/css.html" . }}
 {{ partialCached "head/js.html" . }}
+<script>
+window.__THEME_I18N__ = {
+  copyFailed: {{ i18n "copy_failed" | jsonify }},
+  searchLoading: {{ i18n "search_loading" | jsonify }},
+  searchNoResults: {{ i18n "search_no_results" | jsonify }}
+};
+</script>

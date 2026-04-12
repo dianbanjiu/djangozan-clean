@@ -2,22 +2,14 @@
   {{ partial "hero.html" . }}
 
   {{ $paginator := .Paginate .Pages }}
-  {{ with $paginator.Pages }}
+  {{ if $paginator.Pages }}
     <div class="post-grid">
-      {{ range . }}
-        <article class="card post-card">
-          <h3 class="post-title">
-            <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
-          </h3>
-          <div class="post-meta">
-            {{ partial "datetime.html" . }}
-          </div>
-          {{ with .Summary }}
-            <div class="post-summary">{{ . }}</div>
-          {{ end }}
-        </article>
+      {{ range $paginator.Pages }}
+        {{ partial "post-card.html" . }}
       {{ end }}
     </div>
     {{ partial "pagination.html" $ }}
+  {{ else }}
+    <p class="empty-state">{{ i18n "no_posts" }}</p>
   {{ end }}
 {{ end }}

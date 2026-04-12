@@ -1,7 +1,7 @@
 {{ define "main" }}
   {{ partial "hero.html" . }}
 
-  {{ with .Pages }}
+  {{ if .Pages }}
     <div class="tag-cloud-canvas-wrapper card">
       <canvas id="tag-cloud-canvas"></canvas>
     </div>
@@ -9,7 +9,7 @@
     <script>
       (function () {
         var tags = [
-          {{- range . -}}
+          {{- range .Pages -}}
             ["{{ .LinkTitle | safeJS }}", {{ .Pages.Len }}, "{{ .RelPermalink | safeJS }}"],
           {{- end -}}
         ];
@@ -31,9 +31,26 @@
           };
         }
 
+        function measureCanvasSize() {
+          var rect = wrapper.getBoundingClientRect();
+          var style = getComputedStyle(wrapper);
+          var padX =
+            (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
+          var padY =
+            (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0);
+          var w = Math.max(240, Math.floor(rect.width - padX));
+          var h = Math.max(280, Math.floor(rect.height - padY));
+          /* 首帧或布局未撑开时，用接近卡片比例的高度兜底 */
+          if (h < 320) {
+            h = Math.round(Math.min(Math.max(w * 0.68, 320), 680));
+          }
+          return { w: w, h: h };
+        }
+
         function render() {
-          var w = wrapper.clientWidth;
-          var h = Math.max(360, Math.min(w * 0.6, 500));
+          var dims = measureCanvasSize();
+          var w = dims.w;
+          var h = dims.h;
           canvas.width = w * 2;
           canvas.height = h * 2;
           canvas.style.width = w + 'px';
@@ -43,8 +60,8 @@
           var palette = [colors.accent, colors.accentEnd, colors.text, colors.textSecondary];
 
           var maxCount = Math.max.apply(null, tags.map(function (t) { return t[1]; }));
-          var minSize = 14;
-          var maxSize = Math.max(32, w / 12);
+          var minSize = 15;
+          var maxSize = Math.max(34, Math.min(w / 7, 56));
           var list = tags.map(function (t) {
             var size = maxCount > 1
               ? minSize + (t[1] - 1) / (maxCount - 1) * (maxSize - minSize)
@@ -54,15 +71,16 @@
 
           WordCloud(canvas, {
             list: list,
-            gridSize: 8,
+            gridSize: Math.max(4, Math.round(Math.min(w, h) / 90)),
             weightFactor: 1,
             fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
             fontWeight: 600,
             color: function () {
               return palette[Math.floor(Math.random() * palette.length)];
             },
-            rotateRatio: 0.3,
+            rotateRatio: 0.25,
             rotationSteps: 2,
+            ellipticity: 0.38,
             backgroundColor: 'transparent',
             drawOutOfBound: false,
             shrinkToFit: true,
@@ -77,6 +95,9 @@
         }
 
         render();
+        requestAnimationFrame(function () {
+          render();
+        });
 
         var resizeTimer;
         window.addEventListener('resize', function () {
@@ -92,5 +113,7 @@
         observer.observe(document.documentElement, { attributes: true });
       })();
     </script>
+  {{ else }}
+    <p class="empty-state">{{ i18n "no_tags" }}</p>
   {{ end }}
 {{ end }}

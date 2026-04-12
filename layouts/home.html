@@ -2,15 +2,17 @@
   {{ partial "hero.html" . }}
 
   {{ $paginator := .Paginate site.RegularPages }}
-  {{ with $paginator.Pages }}
+  {{ if $paginator.Pages }}
     <section>
       <h2 class="section-title">{{ i18n "latest_posts" }}</h2>
       <div class="post-grid">
-        {{ range . }}
+        {{ range $paginator.Pages }}
           {{ partial "post-card.html" . }}
         {{ end }}
       </div>
       {{ partial "pagination.html" $ }}
     </section>
+  {{ else }}
+    <p class="empty-state">{{ i18n "no_posts" }}</p>
   {{ end }}
 {{ end }}

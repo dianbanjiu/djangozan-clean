@@ -20,6 +20,13 @@
   --radius-sm: 8px;
   --meta-color: #eff1f5;
   --color-success: #40a02b;
+  --space-section-title-pl: 0.75rem;
+  --space-section-title-border: 4px;
+  --space-tag-x: 1rem;
+  --space-tag-y: 0.5rem;
+  --space-hero-404-y: 5rem;
+  --focus-ring: 2px solid var(--accent);
+  --focus-offset: 2px;
 }
 
 /* ===== Catppuccin Mocha ===== */
@@ -162,6 +169,24 @@ a:hover {
   color: var(--accent-end);
 }
 
+/* Keyboard focus — visible ring without relying on hover shadows */
+.site-nav a:focus-visible,
+.menu-toggle:focus-visible,
+.search-toggle:focus-visible,
+.theme-toggle:focus-visible,
+.pagination-link:focus-visible:not(.disabled),
+.search-overlay-input:focus-visible,
+.tag:focus-visible,
+.nav-search-btn:focus-visible,
+.article-content .code-block .copy-btn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+.search-overlay-input:focus-visible {
+  outline-offset: 1px;
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -290,6 +315,11 @@ main {
   box-shadow: var(--shadow-btn-hover);
 }
 
+.site-nav a.ancestor:not(.active) {
+  color: var(--text);
+  font-weight: 600;
+}
+
 .site-nav a:active {
   box-shadow: var(--shadow-btn-active);
 }
@@ -383,6 +413,18 @@ main {
   transform: translateY(-2px);
 }
 
+.post-card-stretched-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.post-card > :not(.post-card-stretched-link) {
+  position: relative;
+  z-index: 2;
+}
+
 /* ===== Hero ===== */
 .hero {
   text-align: center;
@@ -408,8 +450,8 @@ main {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  padding-left: 0.75rem;
-  border-left: 4px solid var(--accent);
+  padding-left: var(--space-section-title-pl);
+  border-left: var(--space-section-title-border) solid var(--accent);
 }
 
 .post-grid {
@@ -418,7 +460,16 @@ main {
   gap: 1.5rem;
 }
 
+.empty-state {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
 .post-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -462,7 +513,7 @@ main {
 
 .tag {
   display: inline-block;
-  padding: 0.3rem 0.8rem;
+  padding: var(--space-tag-y) var(--space-tag-x);
   border-radius: var(--radius-md);
   font-size: 0.8rem;
   font-weight: 500;
@@ -605,6 +656,14 @@ main {
   display: block;
 }
 
+.article-content .code-block .copy-btn[data-copy-error] {
+  color: #d20f39;
+}
+
+[data-theme="dark"] .article-content .code-block .copy-btn[data-copy-error] {
+  color: #f38ba8;
+}
+
 .article-content pre {
   background: var(--bg);
   border-radius: var(--radius-md);
@@ -670,12 +729,17 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  /* 为画布预留足够矩形区域，避免词云缩成一坨在中间 */
+  min-height: clamp(380px, min(58vh, 52vw), 680px);
 }
 
 .tag-cloud-canvas-wrapper canvas {
   display: block;
   max-width: 100%;
+  height: auto;
 }
 
 /* ===== Search (Pagefind) ===== */
@@ -840,6 +904,11 @@ main {
   color: var(--accent) !important;
 }
 
+.search-wrapper .pagefind-ui__button:focus-visible {
+  outline: var(--focus-ring) !important;
+  outline-offset: var(--focus-offset) !important;
+}
+
 /* ===== Search Overlay ===== */
 .search-overlay {
   position: fixed;
@@ -959,6 +1028,10 @@ main {
   font-size: 0.9rem;
 }
 
+.search-overlay-loading {
+  font-style: italic;
+}
+
 .search-overlay-item {
   display: block;
   padding: 0.75rem;
@@ -972,6 +1045,11 @@ main {
 .search-overlay-item.active {
   background: var(--bg-secondary);
   color: var(--text);
+}
+
+.search-overlay-item:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: -2px;
 }
 
 .search-overlay-item-title {
@@ -1226,5 +1304,28 @@ body.has-bg-image .menu-toggle {
 
   .card {
     padding: 1.25rem;
+  }
+}
+
+.hero--404 {
+  padding: var(--space-hero-404-y) 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .card.post-card:hover,
+  .article-content img:hover,
+  .tag:hover,
+  .pagination-link:hover:not(.disabled),
+  .search-wrapper .pagefind-ui__result:hover {
+    transform: none !important;
+  }
+
+  .search-overlay,
+  .search-overlay-panel {
+    transition: none;
   }
 }
