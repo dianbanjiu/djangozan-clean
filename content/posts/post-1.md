@@ -1,10 +1,94 @@
 +++
-title = 'Post 1'
+title = 'Markdown 常用语法说明'
 date = 2023-01-15T09:00:00-07:00
 draft = false
-tags = ['red']
+tags = ['markdown', 'guide']
 +++
 
-Tempor proident minim aliquip reprehenderit dolor et ad anim Lorem duis sint eiusmod. Labore ut ea duis dolor. Incididunt consectetur proident qui occaecat incididunt do nisi Lorem. Tempor do laborum elit laboris excepteur eiusmod do. Eiusmod nisi excepteur ut amet pariatur adipisicing Lorem.
+Markdown 是一种轻量级标记语言，适合写文档、博客和笔记。下面是常用语法速查。
 
-Occaecat nulla excepteur dolore excepteur duis eiusmod ullamco officia anim in voluptate ea occaecat officia. Cillum sint esse velit ea officia minim fugiat. Elit ea esse id aliquip pariatur cupidatat id duis minim incididunt ea ea. Anim ut duis sunt nisi. Culpa cillum sit voluptate voluptate eiusmod dolor. Enim nisi Lorem ipsum irure est excepteur voluptate eu in enim nisi. Nostrud ipsum Lorem anim sint labore consequat do.
+## 1. 标题
+
+使用 `#` 表示标题，`#` 的数量代表级别：
+
+# 一级标题
+## 二级标题
+### 三级标题
+
+## 2. 段落与换行
+
+普通文本直接书写就是段落。  
+行尾加两个空格可以强制换行。
+
+## 3. 强调
+
+- *斜体*：`*斜体*`
+- **粗体**：`**粗体**`
+- ***粗斜体***：`***粗斜体***`
+- ~~删除线~~：`~~删除线~~`
+
+## 4. 列表
+
+无序列表示例：
+
+- 苹果
+- 香蕉
+- 橙子
+
+有序列表示例：
+
+1. 第一步
+2. 第二步
+3. 第三步
+
+## 5. 引用
+
+> 这是一级引用
+>> 这是二级引用
+
+## 6. 代码
+
+行内代码：使用 `code` 形式。
+
+代码块：
+
+```bash
+echo "Hello Markdown"
+```
+
+## 7. 链接与图片
+
+- 链接语法：`[显示文本](https://example.com)`
+- 示例：[Hugo 官方文档](https://gohugo.io/)
+
+- 图片语法：`![替代文本](图片地址)`
+- 示例：
+  ![示例图片](https://picsum.photos/600/240)
+
+## 8. 分割线
+
+使用三个及以上的 `-`、`*` 或 `_`：
+
+---
+
+## 9. 表格
+
+| 语法 | 说明 |
+| --- | --- |
+| `#` | 标题 |
+| `*text*` | 斜体 |
+| `**text**` | 粗体 |
+| ````` | 代码块 |
+
+## 10. 任务列表
+
+- [x] 已完成事项
+- [ ] 待办事项
+
+## 11. 转义字符
+
+如果要显示 Markdown 的特殊符号，可在前面加反斜杠 `\`，例如：`\*这不是斜体\*`。
+
+---
+
+以上语法已经覆盖日常写作中的大多数场景，可以直接作为 Markdown 入门模板使用。
